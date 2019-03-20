@@ -31,15 +31,26 @@ def predict(request):
         print('username is ' + username)
 
         # 1.get tweets
-        user_id, author_tweets, follower, following = get_tweets(username)
+        try:
+            user_id, author_tweets, follower, following = get_tweets(username)
+        except TypeError:
+            data = {'is_rt': '0', 'prob': ' user is verified'}
+            json_data = json.dumps(data)
+            return HttpResponse(json_data, content_type='application/json')
         # 2.calculate features needed for prediction
         X_test = calculate_features(user_id, author_tweets, follower, following)
-
         # 3.get prediction and probability of being RT
         is_rt = float(clf.predict(X_test)[0])
         prob = float(clf.predict_proba(X_test).tolist()[0][1]*100)
 
         data = {'is_rt': is_rt, 'prob': prob}
+
+        for label, content in X_test.iteritems():
+            for index, value in content.iteritems():
+                if(label == 'text'):
+                    data[label] = value
+                else:
+                    data[label] = float(value)
 
     else:
         data = {'response': 'Not an ajax request'}
@@ -49,7 +60,7 @@ def predict(request):
         # data_dict["ID"] = status.id
         # data_dict["ScreenName"] = status.user.screen_name
 
-    print(data)
+    #print(data)
     json_data = json.dumps(data)
     return HttpResponse(json_data, content_type='application/json')
 

@@ -5,10 +5,10 @@ import datetime
 import math
 import pycld2 as cld2
 import re
-api = twitter.Api(consumer_key='',
-                  consumer_secret='',
-                  access_token_key='',
-                  access_token_secret='')
+api = twitter.Api(consumer_key='CwmoUS5LGaMy8hEv8GXZdvBSo',
+                  consumer_secret='TNkhK3MWXi5l6vZftPXY0X6a9pIfmk7eAUN81AyA9f58ol0Rg5',
+                  access_token_key='947384818559475714-21egVCNzbgRPLztJNkDeuqjpfLOy4EE',
+                  access_token_secret='8wb1FbZRHQBoZy9IgBVUx9OXICtoycfAlDTgPo9z2Tv71')
 
 def is_valid(t):
     return not (t[0] == '@' or
@@ -42,11 +42,10 @@ def get_tweets(username):
 
     user_df = pd.DataFrame()
 
-    # if the account is verified, flag it as a non-troll
+    print(user)
     if user["verified"] is True:
         print("User is verified, so it's highly likely this person is not a troll.")
         return
-
     # 1.user id
     user_id = user["id_str"]
 
